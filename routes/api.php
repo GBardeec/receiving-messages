@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,12 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => 'throttle'], function () {
-    Route::group(['prefix' => 'auth'], function () {
+Route::group(['namespace' => 'App\Http\Controllers'], function () {
+    Route::group(['prefix' => 'auth', 'middleware' => 'throttle'], function () {
         Route::post('/', 'AuthController@registrationOrAuthentication')->name('auth.store');
+        Route::get('/logout', fn() => auth()->logout());
+    });
+
+    // Методы доступные только с авторизацией
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('get-user', fn() => auth()->guard('sanctum')->user());
+
     });
 });

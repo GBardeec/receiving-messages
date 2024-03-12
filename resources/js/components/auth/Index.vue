@@ -12,7 +12,6 @@
                         <p v-for="error in errors" :key="error" class="m-0">{{ error }}</p>
                     </div>
 
-
                     <div class="form-floating mb-4">
                         <input type="email" id="email" v-model="email" class="form-control" placeholder="Email">
                         <label class="form-label" for="emailName">Логин</label>
@@ -27,7 +26,8 @@
                         <small id="emailHelp" class="form-text text-muted">**Если Вы уже были на сайте - введите тот же самый логин и пароль</small>
                     </div>
                     <div class="d-grid gap-2 col-6 mx-auto">
-                        <button @click.prevent="postAuth" class="btn btn-secondary" style="font-size: 1.3em;" type="submit">Войти
+                        <button @click.prevent="postAuth" class="btn btn-secondary" style="font-size: 1.3em;" type="submit">
+                            Войти
                         </button>
                     </div>
                 </div>
@@ -49,7 +49,6 @@ export default {
             email: null,
             password: null,
             errors: [],
-
         }
     },
 
@@ -63,7 +62,7 @@ export default {
                     if (res.data.success) {
                         this.auth = true;
                         this.$emit('authenticated', res.data.token);
-                        router.push({ name: 'finance.index' });
+                        router.push({ name: 'massage.index' });
                     }
                 })
                 .catch(error => {
@@ -81,7 +80,6 @@ export default {
                     } else {
                         this.errors.push("Ошибка: " + error.message);
                     }
-
                 });
         },
     },
