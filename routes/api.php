@@ -25,5 +25,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('get-user', fn() => auth()->guard('sanctum')->user());
 
+        Route::post('store-application', 'ApplicationController@store');
     });
 });

@@ -15,18 +15,24 @@ class AuthController extends Controller
 
     }
 
-    public function registrationOrAuthentication (AuthRequest $request): JsonResponse
+    public function registrationOrAuthentication(AuthRequest $request): JsonResponse
     {
         $data = $request->validated();
 
-        $user = User::query()->where('email', $data['email'])->first() ?? $this->authService->createUser($data['email'], $data['password']);
+        try {
+            $user = User::query()->where('email', $data['email'])->first() ?? $this->authService->createUser($data['email'], $data['password']);
 
-        abort_if(!password_verify($data['password'], $user->password), 403, 'Вы ввели неправельный пароль.');
+            if (!password_verify($data['password'], $user->password)) {
+                return response()->json(['status' => 'error', 'message' => 'Вы ввели неправильный пароль.'], 403);
+            }
 
-        Auth::login($user);
+            Auth::login($user);
 
-        $token = $user->createToken($user->email)->plainTextToken;
+            $token = $user->createToken($user->email)->plainTextToken;
 
-        return response()->json(['success' => true, 'token' => $token]);
+            return response()->json(['status' => 'success', 'token' => $token]);
+        } catch (\Exception $error) {
+            return response()->json(['status' => 'error', 'message' => $error->getMessage()]);
+        }
     }
 }

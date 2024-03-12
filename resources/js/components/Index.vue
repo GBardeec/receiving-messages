@@ -6,10 +6,9 @@
 
 <script>
 import IndexHeader from "@/components/header/Index.vue";
-import IndexFooter from "@/components/footer/Index.vue";
 
 export default {
-    components: {IndexFooter, IndexHeader},
+    components: {IndexHeader},
     name: "Index",
 
     methods: {

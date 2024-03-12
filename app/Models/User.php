@@ -17,6 +17,7 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+    // is_admin не указана специально
 
     protected $hidden = [
         'password',
