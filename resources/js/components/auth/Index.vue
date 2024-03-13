@@ -59,7 +59,7 @@ export default {
                     localStorage.setItem('token', res.data.token);
                     axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
 
-                    if (res.data.success) {
+                    if (res.data.status === 'success') {
                         this.auth = true;
                         this.$emit('authenticated', res.data.token);
                         router.push({ name: 'massage.index' });
