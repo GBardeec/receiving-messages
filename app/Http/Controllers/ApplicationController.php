@@ -7,6 +7,7 @@ use App\Helpers\RespondHelper;
 use App\Helpers\ValidateParamsHelper;
 use App\Http\Requests\UpdateApplicationRequest;
 use App\Http\Requests\UserApplicationRequest;
+use App\Jobs\ProcessUserApplication;
 use App\Services\UserApplicationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class ApplicationController extends Controller
                 $user->save();
             }
 
-            $this->userApplicationService->createUserApplication($user->id, $data['message']);
+            ProcessUserApplication::dispatch($user->id, $data['message']);
 
             return RespondHelper::respondJson(status: 'success', message: 'Заявка успешно отправлена', code: 200);
         } catch (\Exception $error) {
