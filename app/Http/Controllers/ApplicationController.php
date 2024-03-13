@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AccessHelper;
 use App\Helpers\ValidateParamsHelper;
+use App\Http\Requests\UpdateApplicationRequest;
 use App\Http\Requests\UserApplicationRequest;
 use App\Services\UserApplicationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class ApplicationController extends Controller
 {
@@ -31,12 +32,11 @@ class ApplicationController extends Controller
 
             $this->userApplicationService->createUserApplication($user->id, $data['message']);
 
-            return response()->json(['status' => 'success']);
+            return response()->json(['status' => 'success', 'message' => 'Заявка успешно отправлена']);
         } catch (\Exception $error) {
             return response()->json(['status' => 'error', 'message' => $error->getMessage()]);
         }
     }
-
 
     public function index(Request $request): JsonResponse
     {
@@ -46,23 +46,22 @@ class ApplicationController extends Controller
             return $response;
         }
 
+        if ($response = AccessHelper::checkAccess($request, ['isAdmin' => true])) {
+            return $response;
+        }
+
         $isNotActive = $request->get('isNotActive') == "true";
         $orderByDeskDate = $request->get('orderByDeskDate') == "true";
 
-        $user = auth()->guard('sanctum')->user();
-
-        if (Gate::allows('is_admin', $user)) {
-            return $this->userApplicationService->getApplication($isNotActive, $orderByDeskDate);
-        }
-
-        return response()->json([
-            'status' => 'error',
-            'message' => 'У вас нет прав для доступа к заявкам'
-        ], 403);
+        return $this->userApplicationService->getApplication($isNotActive, $orderByDeskDate);
     }
 
-    public function show()
+    public function update(UpdateApplicationRequest $request): JsonResponse
     {
+        if ($response = AccessHelper::checkAccess($request, ['isAdmin' => true])) {
+            return $response;
+        }
 
+        return $this->userApplicationService->updateApplication($request->input('params.id'), $request->input('params.comment'));
     }
 }

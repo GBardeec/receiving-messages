@@ -37,4 +37,24 @@ class UserApplicationService
             ]);
         }
     }
+
+    public function updateApplication(int $id, string $comment): JsonResponse
+    {
+        try {
+            $application = Application::find($id);
+            $application->comment = $comment;
+            $application->status = Application::RESOLVED;
+            $application->save();
+
+            return response()->json([
+                'status' => 'success',
+                'massage' => 'Комментарий успешно добавлен',
+            ]);
+        } catch (\Exception $error) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $error->getMessage()
+            ]);
+        }
+    }
 }

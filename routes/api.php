@@ -28,7 +28,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::group(['prefix' => 'requests'], function () {
             Route::post('/', 'ApplicationController@store');
             Route::get('/', 'ApplicationController@index');
-            Route::get('/{id}', 'ApplicationController@show');
+            Route::put('/', 'ApplicationController@update');
         });
     });
 });

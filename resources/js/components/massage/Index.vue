@@ -5,19 +5,27 @@
             <div>
                 <div v-if="this.user['is_admin']">
                     <div class="d-flex">
-                        <div class="form-check">
+                        <div class="form-check mr-2">
                             <input class="form-check-input" type="checkbox" v-model="isNotActive"
                                    @change="updateURLParams">
-                            <label class="form-check-label" for="flexCheckDefault">Показать неактивные заявки</label>
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Показать неактивные заявки
+                            </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" v-model="orderByDeskDate"
                                    @change="updateURLParams">
-                            <label class="form-check-label" for="flexCheckChecked">Показать вначале старые
-                                заявки</label>
+                            <label class="form-check-label" for="flexCheckChecked">
+                                Показать вначале старые заявки
+                            </label>
                         </div>
                     </div>
                     <div>
+                        <!-- Вывод ошибок -->
+                        <div v-if="errors && errors.length > 0" class="alert alert-danger">
+                            <p v-for="error in errors" :key="error" class="m-0">{{ error }}</p>
+                        </div>
+
                         <table class="table">
                             <thead>
                             <tr>
@@ -26,15 +34,36 @@
                                 <th scope="col">Эл.почта</th>
                                 <th scope="col">Сообщение</th>
                                 <th scope="col">Дата</th>
+                                <th scope="col">Действия</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr v-for="(item, index) in application" :key="item.id">
+                            <tbody v-for="(item, index) in application" :key="item.id">
+                            <tr>
                                 <th scope="row">{{ index + 1 }}</th>
                                 <td>{{ item.user.name }}</td>
                                 <td>{{ item.user.email }}</td>
                                 <td>{{ item.message }}</td>
                                 <td>{{ formatDate(item.created_at) }}</td>
+                                <td>
+                                    <a class="btn btn-success" @click="toggleCommentInput(index)">
+                                        Ответить
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr v-if="showCommentInput === index">
+                                <td colspan="6" class="p-0">
+                                    <div class="input-group mt-1 mb-1">
+                                        <input type="text" class="form-control w-75"
+                                               placeholder="Введите комментарий"
+                                               aria-describedby="basic-addon2"
+                                               v-model="commentInput">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button" @click="putApplication(index)">
+                                                Отпрвить
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -94,6 +123,10 @@ export default {
             application: null,
             isNotActive: false,
             orderByDeskDate: false,
+
+            showCommentInput: null,
+            commentInput: '',
+            commentIdInput: '',
 
             errors: [],
         }
@@ -191,7 +224,42 @@ export default {
 
         formatDate(dateString) {
             return new Date(dateString).toLocaleString();
-        }
+        },
+
+        toggleCommentInput(index) {
+            this.showCommentInput = this.showCommentInput === index ? null : index;
+        },
+
+        putApplication(index) {
+            axios.put('/api/requests', {
+                params: {
+                    id: this.application[index].id,
+                    comment: this.commentInput
+                }
+            })
+                .then(res => {
+
+                })
+                .catch(error => {
+                    this.errors = [];
+
+                    if (error.response && error.response.data && error.response.data.errors) {
+                        const serverErrors = error.response.data.errors;
+
+                        for (const key in serverErrors) {
+                            if (serverErrors.hasOwnProperty(key)) {
+                                const errorMessage = "Ошибка: " + serverErrors[key];
+                                this.errors.push(errorMessage);
+                            }
+                        }
+                    } else {
+                        this.errors.push("Ошибка: " + error.message);
+                    }
+                });
+
+            this.commentInput = '';
+            this.showCommentInput = null;
+        },
     },
 };
 </script>
