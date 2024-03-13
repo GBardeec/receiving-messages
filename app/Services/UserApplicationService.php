@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Helpers\RespondHelper;
+use App\Mail\SendingReplyEmail;
 use App\Models\Application;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Mail;
 
 class UserApplicationService
 {
@@ -44,7 +46,10 @@ class UserApplicationService
 
             $application->comment = $comment;
             $application->status = Application::RESOLVED;
-            $application->save();
+
+            if ($application->save()) {
+                Mail::to($application->user->email)->send(new SendingReplyEmail($application->message, $application->comment));
+            }
 
             return RespondHelper::respondJson(status: 'success', message: 'Комментарий успешно добавлен', code: 200);
         } catch (\Exception $error) {

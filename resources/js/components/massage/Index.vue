@@ -94,9 +94,6 @@
                     <button class="btn btn-primary" @click.prevent="postApplication">
                         Отправить
                     </button>
-                    <button class="btn btn-primary" @click.prevent="getApplication">
-                        xtr
-                    </button>
                 </div>
             </div>
         </main>
