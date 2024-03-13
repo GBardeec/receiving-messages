@@ -13,10 +13,10 @@ class ProcessUserApplication implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $userId;
-    protected $message;
+    protected int $userId;
+    protected string $message;
 
-    public function __construct($userId, $message)
+    public function __construct(int $userId,string $message)
     {
         $this->userId = $userId;
         $this->message = $message;
