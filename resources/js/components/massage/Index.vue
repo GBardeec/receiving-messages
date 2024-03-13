@@ -45,7 +45,7 @@
                                 <td>{{ item.message }}</td>
                                 <td>{{ formatDate(item.created_at) }}</td>
                                 <td>
-                                    <a class="btn btn-success" @click="toggleCommentInput(index)">
+                                    <a class="btn btn-success" @click="toggleCommentInput(index)" v-if="item.comment === null">
                                         Ответить
                                     </a>
                                 </td>
@@ -134,7 +134,6 @@ export default {
 
     mounted() {
         this.getUser();
-        this.getApplication()
     },
 
     methods: {
@@ -145,6 +144,10 @@ export default {
 
                     this.name = this.user['name'];
                     this.email = this.user['email'];
+
+                    if (this.user.is_admin) {
+                        this.getApplication();
+                    }
                 })
                 .catch(error => {
                     console.error(error);
@@ -154,7 +157,8 @@ export default {
         postApplication() {
             axios.post('/api/requests', {name: this.name, email: this.email, message: this.message})
                 .then(res => {
-                    console.error('success');
+                    console.log('success');
+                    this.message = null;
                 })
                 .catch(error => {
                     this.errors = [];
@@ -202,7 +206,7 @@ export default {
                 }
             })
                 .then(res => {
-                    this.application = res.data.application;
+                    this.application = res.data.data.application;
                 })
                 .catch(error => {
                     this.errors = [];
@@ -259,6 +263,7 @@ export default {
 
             this.commentInput = '';
             this.showCommentInput = null;
+            this.getApplication()
         },
     },
 };

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\RespondHelper;
 use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use App\Services\AuthService;
@@ -30,9 +31,9 @@ class AuthController extends Controller
 
             $token = $user->createToken($user->email)->plainTextToken;
 
-            return response()->json(['status' => 'success', 'token' => $token]);
+            return RespondHelper::respondJson(status: 'success', data: ['token' => $token] ,message: 'Выход успешно выполнено', code: 200);
         } catch (\Exception $error) {
-            return response()->json(['status' => 'error', 'message' => $error->getMessage()]);
+            return RespondHelper::respondJson(status: 'error', message: $error->getMessage());
         }
     }
 }

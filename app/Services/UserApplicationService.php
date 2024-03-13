@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\RespondHelper;
 use App\Models\Application;
 use Illuminate\Http\JsonResponse;
 
@@ -26,15 +27,9 @@ class UserApplicationService
 
             $applications = $query->with('user')->get();
 
-            return response()->json([
-                'status' => 'success',
-                'application' => $applications,
-            ]);
+            return RespondHelper::respondJson(status: 'success', data: ['application' => $applications], code: 200);
         } catch (\Exception $error) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $error->getMessage()
-            ]);
+            return RespondHelper::respondJson(status: 'error',  message: $error->getMessage());
         }
     }
 
@@ -42,19 +37,18 @@ class UserApplicationService
     {
         try {
             $application = Application::find($id);
+
+            if ($application->status === Application::RESOLVED) {
+                return RespondHelper::respondJson(status: 'error', message: 'Заявка уже рассмотрена', code: 422);
+            }
+
             $application->comment = $comment;
             $application->status = Application::RESOLVED;
             $application->save();
 
-            return response()->json([
-                'status' => 'success',
-                'massage' => 'Комментарий успешно добавлен',
-            ]);
+            return RespondHelper::respondJson(status: 'success', message: 'Комментарий успешно добавлен', code: 200);
         } catch (\Exception $error) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $error->getMessage()
-            ]);
+            return RespondHelper::respondJson(status: 'error', message: $error->getMessage());
         }
     }
 }

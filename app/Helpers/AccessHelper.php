@@ -16,10 +16,7 @@ class AccessHelper
             switch ($param) {
                 case 'isAdmin':
                     if ($value && !Gate::allows('is_admin', $user)) {
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => 'Недостаточно прав доступа'
-                        ], 403);
+                        return RespondHelper::respondJson(status: 'error', message: 'Недостаточно прав доступа', code: 403);
                     }
                     break;
             }

@@ -2,7 +2,7 @@ import { createWebHistory, createRouter } from 'vue-router';
 
 const routes = [
     {
-        path: '/application',
+        path: '/',
         component: () => import('./components/massage/Index.vue'),
         name: 'massage.index'
     },

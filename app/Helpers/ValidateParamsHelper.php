@@ -11,10 +11,7 @@ class ValidateParamsHelper
         $invalidParams = array_diff(array_keys($request->all()), $allowedParams);
 
         if (!empty($invalidParams)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Переданы неккоректные параметры'
-            ], 422);
+            return RespondHelper::respondJson(status: 'error', message: 'Переданы неккоректные параметры', code: 422);
         }
 
         return null;

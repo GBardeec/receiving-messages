@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\AccessHelper;
+use App\Helpers\RespondHelper;
 use App\Helpers\ValidateParamsHelper;
 use App\Http\Requests\UpdateApplicationRequest;
 use App\Http\Requests\UserApplicationRequest;
@@ -32,9 +33,9 @@ class ApplicationController extends Controller
 
             $this->userApplicationService->createUserApplication($user->id, $data['message']);
 
-            return response()->json(['status' => 'success', 'message' => 'Заявка успешно отправлена']);
+            return RespondHelper::respondJson(status: 'success', message: 'Заявка успешно отправлена', code: 200);
         } catch (\Exception $error) {
-            return response()->json(['status' => 'error', 'message' => $error->getMessage()]);
+            return RespondHelper::respondJson(status: 'error', message: $error->getMessage());
         }
     }
 
@@ -50,8 +51,8 @@ class ApplicationController extends Controller
             return $response;
         }
 
-        $isNotActive = $request->get('isNotActive') == "true";
-        $orderByDeskDate = $request->get('orderByDeskDate') == "true";
+        $isNotActive = $request->get('isNotActive') === "true";
+        $orderByDeskDate = $request->get('orderByDeskDate') === "true";
 
         return $this->userApplicationService->getApplication($isNotActive, $orderByDeskDate);
     }

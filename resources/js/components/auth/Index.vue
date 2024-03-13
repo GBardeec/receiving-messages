@@ -56,13 +56,15 @@ export default {
         postAuth() {
             axios.post('/api/auth', { email: this.email, password: this.password })
                 .then(res => {
-                    localStorage.setItem('token', res.data.token);
-                    axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
+                    localStorage.setItem('token', res.data.data.token);
+                    axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.data.token}`;
 
                     if (res.data.status === 'success') {
                         this.auth = true;
-                        this.$emit('authenticated', res.data.token);
+                        this.$emit('authenticated', res.data.data.token);
                         router.push({ name: 'massage.index' });
+
+                        console.log(123);
                     }
                 })
                 .catch(error => {
