@@ -1,0 +1,442 @@
+openapi: 3.0.3
+info:
+  title: Laravel
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost'
+paths:
+  /api/auth:
+    post:
+      summary: 'Проводит регистрацию или аутентификацию пользователя.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: success
+                  message: 'Выход успешно выполнено'
+                  data:
+                    token: 38|p4oXqCstAwanl2yB5wToVqR6jU1PhaQYtKRF47km33ca8585
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: 'Выход успешно выполнено'
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        example: 38|p4oXqCstAwanl2yB5wToVqR6jU1PhaQYtKRF47km33ca8585
+        403:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Вы ввели неправильный пароль.'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Вы ввели неправильный пароль.'
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Сообщение с ошибкой'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Сообщение с ошибкой'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must not be greater than 255 characters. Must be at least 3 characters.'
+                  example: cartwright.stacy@example.org
+                password:
+                  type: string
+                  description: 'Must not be greater than 255 characters. Must be at least 3 characters.'
+                  example: "]N,|CX']X"
+              required:
+                - email
+                - password
+      security: []
+  /api/auth/logout:
+    get:
+      summary: ''
+      operationId: getApiAuthLogout
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: ''
+      tags:
+        - Endpoints
+      security: []
+  /api/get-user:
+    get:
+      summary: ''
+      operationId: getApiGetUser
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  /api/requests:
+    post:
+      summary: 'Сохраняет заявку пользователя.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: success
+                  message: 'Заявка успешно отправлена'
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: 'Заявка успешно отправлена'
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Сообщение с ошибкой'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Сообщение с ошибкой'
+      tags:
+        - Заявка
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must not be greater than 255 characters. Must be at least 3 characters.'
+                  example: jaclyn.greenholt@example.org
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: kgoiuu
+                message:
+                  type: string
+                  description: 'Must not be greater than 255 characters. Must be at least 3 characters.'
+                  example: illobsxdobqlurvetfppegotqceznimhkchfnlnjvjgzf
+              required:
+                - email
+                - name
+                - message
+    get:
+      summary: 'Получает заявки пользователей.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: success
+                  data:
+                    -
+                      id: 1
+                      user_id: 4
+                      status: 0
+                      message: аываfds
+                      comment: fsdf
+                      created_at: '2024-03-12T15:25:28.000000Z'
+                      updated_at: '2024-03-13T07:58:03.000000Z'
+                      user:
+                        id: 4
+                        name: gfdg
+                        email: admin@admin
+                        is_admin: true
+                        created_at: '2024-03-12T12:35:42.000000Z'
+                        updated_at: '2024-03-12T15:39:55.000000Z'
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        user_id: 4
+                        status: 0
+                        message: аываfds
+                        comment: fsdf
+                        created_at: '2024-03-12T15:25:28.000000Z'
+                        updated_at: '2024-03-13T07:58:03.000000Z'
+                        user:
+                          id: 4
+                          name: gfdg
+                          email: admin@admin
+                          is_admin: true
+                          created_at: '2024-03-12T12:35:42.000000Z'
+                          updated_at: '2024-03-12T15:39:55.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        user_id:
+                          type: integer
+                          example: 4
+                        status:
+                          type: integer
+                          example: 0
+                        message:
+                          type: string
+                          example: аываfds
+                        comment:
+                          type: string
+                          example: fsdf
+                        created_at:
+                          type: string
+                          example: '2024-03-12T15:25:28.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2024-03-13T07:58:03.000000Z'
+                        user:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 4
+                            name:
+                              type: string
+                              example: gfdg
+                            email:
+                              type: string
+                              example: admin@admin
+                            is_admin:
+                              type: boolean
+                              example: true
+                            created_at:
+                              type: string
+                              example: '2024-03-12T12:35:42.000000Z'
+                            updated_at:
+                              type: string
+                              example: '2024-03-12T15:39:55.000000Z'
+        400:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Некорректные параметры запроса'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Некорректные параметры запроса'
+        403:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Отказано в доступе'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Отказано в доступе'
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Сообщение с ошибкой'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Сообщение с ошибкой'
+      tags:
+        - Заявка
+    put:
+      summary: 'Добавляет ответ на сообщение пользователя.'
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: success
+                  message: 'Комментарий успешно добавлен'
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: 'Комментарий успешно добавлен'
+        403:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Отказано в доступе'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Отказано в доступе'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Заявка уже рассмотрена'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Заявка уже рассмотрена'
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Сообщение с ошибкой'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Сообщение с ошибкой'
+      tags:
+        - Заявка
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                params:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    id:
+                      type: integer
+                      description: ''
+                      example: 4
+                    comment:
+                      type: string
+                      description: 'Must not be greater than 255 characters. Must be at least 1 character.'
+                      example: pelsijyehuarlutbibleqsshkorretbxm
+tags:
+  -
+    name: Endpoints
+    description: ''
+  -
+    name: Заявка
+    description: ''

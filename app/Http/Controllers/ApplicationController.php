@@ -12,6 +12,10 @@ use App\Services\UserApplicationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * @group Заявка
+ * @authenticated
+ */
 class ApplicationController extends Controller
 {
 
@@ -19,7 +23,17 @@ class ApplicationController extends Controller
     {
     }
 
-
+    /**
+     * Сохраняет заявку пользователя.
+     *
+     * @param UserApplicationRequest $request Объект запроса.
+     *
+     * @responseFile 200 storage/responses/application/store/200.json
+     *
+     * @responseFile 500 storage/responses/application/store/500.json
+     *
+     * @return \Illuminate\Http\JsonResponse Ответ в формате JSON.
+     */
     public function store(UserApplicationRequest $request): JsonResponse
     {
         $data = $request->validated();
@@ -40,6 +54,18 @@ class ApplicationController extends Controller
         }
     }
 
+    /**
+     * Получает заявки пользователей.
+     *
+     * @param Request $request Объект запроса.
+     *
+     * @responseFile 200 storage/responses/application/index/200.json
+     * @responseFile 400 storage/responses/application/index/400.json
+     * @responseFile 403 storage/responses/application/index/403.json
+     * @responseFile 500 storage/responses/application/index/500.json
+     *
+     * @return \Illuminate\Http\JsonResponse Ответ в формате JSON.
+     */
     public function index(Request $request): JsonResponse
     {
         $allowedParams = ['isNotActive', 'orderByDeskDate'];
@@ -58,6 +84,20 @@ class ApplicationController extends Controller
         return $this->userApplicationService->getApplication($isNotActive, $orderByDeskDate);
     }
 
+    /**
+     * Добавляет ответ на сообщение пользователя.
+     *
+     * @authenticated
+     *
+     * @param UpdateApplicationRequest $request Объект запроса на обновление заявки.
+     *
+     * @responseFile 200 storage/responses/application/update/200.json
+     * @responseFile 403 storage/responses/application/update/403.json
+     * @responseFile 422 storage/responses/application/update/422.json
+     * @responseFile 500 storage/responses/application/update/500.json
+     *
+     * @return \Illuminate\Http\JsonResponse Ответ в формате JSON.
+     */
     public function update(UpdateApplicationRequest $request): JsonResponse
     {
         if ($response = AccessHelper::checkAccess($request, ['isAdmin' => true])) {

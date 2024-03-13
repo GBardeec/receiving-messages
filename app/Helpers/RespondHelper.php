@@ -8,10 +8,15 @@ class RespondHelper
 {
     public static function respondJson(string $status, array $data = [], string $message = '', int $code = null): JsonResponse
     {
-        return response()->json([
-            'status' => $status,
-            'data' => $data,
-            'message' => $message,
-        ], $code);
+        $responseData = ['status' => $status];
+
+        if (!empty($data)) {
+            $responseData['data'] = $data;
+        }
+
+        $responseData['message'] = $message;
+
+        return response()->json($responseData, $code);
     }
+
 }
